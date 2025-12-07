@@ -5,9 +5,9 @@ import { Roboto } from "next/font/google";
 import { Suspense } from "react";
 import { Spinner } from "@/components/kibo-ui/spinner";
 export const metadata: Metadata = {
-  title: "Soulflag Admin",
+  title: "Lifted Admin",
   description:
-    "Admin dashboard for Soulflag application management and monitoring.",
+    "Admin dashboard for lifted application management and monitoring.",
 };
 const roboto = Roboto({
   variable: "--font-roboto",
