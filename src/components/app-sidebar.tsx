@@ -116,11 +116,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <div className="w-[200px] mx-auto flex justify-center items-center ">
             <Link href={"/"} className="w-fit">
               <Image
-                src={"/logo.webp"}
+                src={"/logo.png"}
                 height={200}
                 width={200}
                 alt="icon"
-                className="w-fit"
+                className="w-fit bg-background size-[160px]"
               />
             </Link>
           </div>
