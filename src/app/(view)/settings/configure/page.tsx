@@ -26,7 +26,7 @@ export default function Page() {
         <h3 className="text-2xl font-semibold">System Configuration</h3>
         <Button variant={"special"}>Save all changes</Button>
       </div>
-      <div className="grid grid-cols-2 gap-4 mt-8">
+      <div className="grid lg:grid-cols-2 gap-4 mt-8">
         <Card>
           <CardHeader className="flex items-center gap-4">
             <div className="rounded-full p-4 bg-sky-200 w-fit text-sky-700">
