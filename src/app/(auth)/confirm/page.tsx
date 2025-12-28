@@ -5,10 +5,10 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="h-full w-full text-background px-6">
+    <div className="h-full w-full px-6">
       <div className="grid place-items-center h-1/3 mb-4">
         <Image
-          src={"/logo.webp"}
+          src={"/logo-clean.png"}
           height={800}
           width={1200}
           alt="logo"
@@ -25,8 +25,8 @@ export default function Home() {
       </div>
 
       <Button
-        className="w-full text-background! font-bold border cursor-pointer hover:bg-background/10 transition-all active:scale-95 mt-2"
-        variant={"ghost"}
+        className="w-full transition-all active:scale-95 mt-2"
+        variant={"special"}
         asChild
       >
         <Link href={"/"}>Done</Link>

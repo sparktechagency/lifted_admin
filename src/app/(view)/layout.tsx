@@ -9,10 +9,26 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { BellIcon } from "lucide-react";
+import { cookies } from "next/headers";
+import { notFound, redirect } from "next/navigation";
+import { getMeApi } from "@/lib/api/auth";
 
-export default function Layout({
+export default async function Layout({
   children,
 }: Readonly<{ children: ReactNode }>) {
+  const token = (await cookies()).get("token")?.value;
+  if (!token) {
+    return notFound();
+  }
+
+  const user = await getMeApi(token).catch(() => {
+    redirect("/login");
+  });
+
+  if (user.data.roles[0].name !== "admin") {
+    return notFound();
+  }
+
   return (
     <SidebarProvider>
       <AppSidebar />

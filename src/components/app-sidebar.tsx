@@ -10,6 +10,7 @@ import {
   LayoutDashboardIcon,
   LayoutList,
   LockIcon,
+  LogOutIcon,
   NetworkIcon,
   SettingsIcon,
   UsersIcon,
@@ -22,11 +23,17 @@ import { NavMain } from "@/components/nav-main";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
 import Link from "next/link";
+import { NavUser } from "./nav-user";
+import { Button } from "./ui/button";
+import { useCookies } from "react-cookie";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const data = {
   navMain: [
@@ -109,6 +116,8 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [, , removeCookie] = useCookies(["token"]);
+  const navig = useRouter();
   return (
     <Sidebar variant="sidebar" {...props}>
       <SidebarHeader className="">
@@ -129,6 +138,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent className="px-4">
         <NavMain items={data.navMain} />
       </SidebarContent>
+      <SidebarFooter>
+        <Button
+          onClick={() => {
+            try {
+              removeCookie("token");
+              navig.refresh();
+              navig.push("/login");
+            } catch (error) {
+              console.error(error);
+              toast.error("Something went wrong");
+            }
+          }}
+          variant={"secondary"}
+        >
+          Log Out <LogOutIcon />
+        </Button>
+      </SidebarFooter>
     </Sidebar>
   );
 }

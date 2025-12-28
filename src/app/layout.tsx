@@ -4,6 +4,8 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Roboto } from "next/font/google";
 import { Suspense } from "react";
 import { Spinner } from "@/components/kibo-ui/spinner";
+import GodProvider from "@/provider/god-provider";
+import { Toaster } from "@/components/ui/sonner";
 export const metadata: Metadata = {
   title: "Lifted Admin",
   description:
@@ -27,7 +29,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Suspense fallback={<Spinner variant="bars" />}>{children}</Suspense>
+          <Suspense fallback={<Spinner variant="bars" />}>
+            <GodProvider>
+              {children}
+              <Toaster richColors />
+            </GodProvider>
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>

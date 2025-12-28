@@ -10,11 +10,17 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { getRecentActivitiesApi, getStateApi } from "@/lib/api/admin";
+import { cookies } from "next/headers";
 
-export default function Page() {
+export default async function Page() {
+  const token = (await cookies()).get("token")?.value || "";
+  const status = await getStateApi(token);
+  const recentActivities = await getRecentActivitiesApi(token);
+
   return (
     <main className="min-h-screen w-full flex flex-col gap-6 px-0 md:px-6 lg:px-0 overflow-x-hidden">
-      <Sect />
+      <Sect data={status?.data} />
       {/* Main Grid */}
       <div className="grid grid-cols-1 gap-6 w-full">
         <Card>
@@ -31,29 +37,34 @@ export default function Page() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow>
-                  <TableCell className="text-center font-medium flex flex-row gap-2 justify-center items-center">
-                    <Avatar>
-                      <AvatarImage
-                        src={"https://avatar.iran.liara.run/public"}
-                      />
-                      <AvatarFallback>UI</AvatarFallback>
-                    </Avatar>
-                    John Doe
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-center font-medium flex flex-row gap-2 justify-center items-center">
-                      <Badge className="bg-amber-200 text-amber-600">
-                        Custom Affirmation
-                      </Badge>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-center font-medium flex flex-row gap-2 justify-center items-center">
-                      Added : I am Improving Daily
-                    </div>
-                  </TableCell>
-                </TableRow>
+                {recentActivities?.data?.map((activity) => (
+                  <TableRow key={activity.id}>
+                    <TableCell className="text-center font-medium flex flex-row gap-2 justify-center items-center">
+                      <Avatar>
+                        <AvatarImage
+                          src={
+                            activity?.causer?.avatar ||
+                            "https://avatar.iran.liara.run/public"
+                          }
+                        />
+                        <AvatarFallback>UI</AvatarFallback>
+                      </Avatar>
+                      {activity?.causer?.name || "Unknown User"}
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-center font-medium flex flex-row gap-2 justify-center items-center">
+                        <Badge className="bg-amber-200 text-amber-600">
+                          {activity.log_name}
+                        </Badge>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-center font-medium flex flex-row gap-2 justify-center items-center">
+                        {activity.description}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </CardContent>
