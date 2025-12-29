@@ -30,7 +30,11 @@ import Link from "next/link";
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Sect from "./sect";
-export default function Page() {
+import { cookies } from "next/headers";
+import { getUserSummary } from "@/lib/api/admin";
+export default async function Page() {
+  const token = (await cookies()).get("token")?.value || "";
+  const data = getUserSummary(token);
   return (
     <Card>
       <CardContent>

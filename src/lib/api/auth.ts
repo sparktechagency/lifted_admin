@@ -1,4 +1,4 @@
-import { howl } from "../utils";
+import { base_api, base_url, howl } from "../utils";
 import type { loginResponse, UserType } from "@/lib/types/auth";
 import type { ApiResponse } from "@/lib/types/base";
 
@@ -24,9 +24,26 @@ export async function getMeApi(token:string):Promise<{data:UserType}>{
     return howl(`/profile/me`,{token});
 }
 
-export async function updateMeApi(token:string,body:FormData):Promise<ApiResponse<{user:UserType}>>{
-    return howl(`/profile/update`,{token,body,method:"POST"});
+export async function updateMeApi(
+  token: string,
+  body: FormData
+): Promise<ApiResponse<{ user: UserType }>> {
+  const res = await fetch(`${base_url}${base_api}/profile/update`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body,
+  });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => null);
+    throw error ?? new Error("Failed to update profile");
+  }
+
+  return res.json();
 }
+
 
 export async function updatePass(token:string,body:{
     current_password: string;

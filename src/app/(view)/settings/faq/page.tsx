@@ -6,17 +6,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { EditIcon, PlusIcon, Trash2Icon } from "lucide-react";
-import React from "react";
+import React, { Suspense } from "react";
 
 export default function Page() {
   return (
     <section className="">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-2xl font-semibold">FAQ Management</h3>
-        <Button variant={"special"}>
-          <PlusIcon />
-          Add New FAQ
-        </Button>
+        <Suspense>
+          <Button variant={"special"}>
+            <PlusIcon />
+            Add New FAQ
+          </Button>
+        </Suspense>
       </div>
       <Card>
         <CardContent className="flex justify-between items-center">

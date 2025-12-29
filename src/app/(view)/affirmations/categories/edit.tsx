@@ -13,20 +13,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+import { EditIcon, PlusIcon } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createAffirmationCategory } from "@/lib/api/admin";
+import {
+  createAffirmationCategory,
+  updateAffirmationCategory,
+} from "@/lib/api/admin";
 import { toast } from "sonner";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 
-export default function Add() {
+export default function Edit({
+  data,
+}: {
+  data: { id: string; name: string; description: string };
+}) {
   const [{ token }] = useCookies(["token"]);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState(data.name);
+  const [description, setDescription] = useState(data.description);
   const qcl = useQueryClient();
   const { mutate, isPending } = useMutation({
-    mutationKey: ["add_cat"],
+    mutationKey: ["update_cat"],
     mutationFn: ({
       name,
       description,
@@ -34,7 +41,10 @@ export default function Add() {
       name: string;
       description: string;
     }) => {
-      return createAffirmationCategory({ name, description }, token);
+      return updateAffirmationCategory(
+        { id: data.id, name, description },
+        token
+      );
     },
     onError: (err) => {
       toast.error(err.message ?? "Failed to complete this request");
@@ -47,14 +57,13 @@ export default function Add() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"special"}>
-          <PlusIcon />
-          Add Reason
+        <Button variant={"outline"} size={"icon"}>
+          <EditIcon />
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Category</DialogTitle>
+          <DialogTitle>Edit Category</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <Label>Name</Label>
@@ -83,7 +92,7 @@ export default function Add() {
               mutate({ name, description });
             }}
           >
-            {isPending ? "Adding..." : "Add Category"}
+            {isPending ? "Adding..." : "Update Category"}
           </Button>
         </DialogFooter>
       </DialogContent>

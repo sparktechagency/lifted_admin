@@ -1,85 +1,44 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Dropzone,
-  DropzoneContent,
-  DropzoneEmptyState,
-} from "@/components/ui/shadcn-io/dropzone";
 import { PlusIcon, SmileIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { Suspense } from "react";
+import Add from "./add";
+import { cookies } from "next/headers";
+import { getSocials } from "@/lib/api/admin";
+import Image from "next/image";
+import { base_url } from "@/lib/utils";
+import Link from "next/link";
 
-export default function Page() {
-  const [files, setFiles] = useState<File[] | undefined>();
-  const handleDrop = (files: File[]) => {
-    console.log(files);
-    setFiles(files);
-  };
+export default async function Page() {
+  const token = (await cookies()).get("token")?.value || "";
+  const data = await getSocials(token);
+  console.log(data.data);
+
   return (
     <section>
       <div className="flex justify-center items-center p-12 gap-6">
-        {Array(6)
-          .fill("")
-          .map((_, i: number) => (
-            <div
-              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-              key={i}
-              className="border-2 size-[200px] border-dashed aspect-square flex flex-col justify-center items-center text-muted-foreground space-y-4"
-            >
-              <SmileIcon className="rotate-45" />
-              <p className="text-sm">Smile often</p>
+        {data.data.data.map((x) => (
+          <Link
+            key={x.id}
+            href={x.link}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div className="border-2 size-[200px] hover:bg-secondary border-dashed aspect-square flex flex-col justify-center items-center text-muted-foreground space-y-4 rounded-lg p-4 hover:">
+              <Image
+                src={`${base_url}/storage/${x.icon}`}
+                height={100}
+                width={100}
+                alt="icon"
+                unoptimized
+              />
+              <p className="text-sm">{x.name}</p>
             </div>
-          ))}
+          </Link>
+        ))}
       </div>
       <div className="flex justify-center items-center mt-6">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button size={"lg"} className="xl:w-[50dvw]" variant={"special"}>
-              <PlusIcon />
-              Add New Platform
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className="text-center">
-                Add New Platform
-              </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <Label>Course Thumbnail</Label>
-              <Dropzone
-                accept={{ "image/*": [] }}
-                maxFiles={1}
-                // maxSize={1024 * 1024 * 10}
-                // minSize={1024}
-                onDrop={handleDrop}
-                onError={console.error}
-                src={files}
-              >
-                <DropzoneEmptyState />
-                <DropzoneContent />
-              </Dropzone>
-              <Label>Name</Label>
-              <Input placeholder="Enter Platform Name" />
-              <Label>Platform Link/Number</Label>
-              <Input placeholder="Enter Platform Link" />
-            </div>
-            <DialogFooter>
-              <Button className="w-full" variant={"special"}>
-                Add
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <Suspense>
+          <Add />
+        </Suspense>
       </div>
     </section>
   );

@@ -13,15 +13,15 @@ export default function Page() {
   const [text, setText] = useState<string>("");
   const [{ token }] = useCookies(["token"]);
   const { data, isPending: loading } = useQuery({
-    queryKey: ["tnc_page"],
+    queryKey: ["about_page"],
     queryFn: () => {
-      return getPage("terms_and_conditions", token);
+      return getPage("about", token);
     },
   });
   const { mutate, isPending } = useMutation({
-    mutationKey: ["update_tnc"],
+    mutationKey: ["update_about"],
     mutationFn: () => {
-      return updatePage("terms_and_conditions", text, token);
+      return updatePage("about", text, token);
     },
     onError: (err) => {
       toast.error(err.message ?? "Failed to complete this request");
@@ -37,7 +37,7 @@ export default function Page() {
   }, [loading, data]);
   return (
     <div className="!pb-12 !pr-6 !space-y-6">
-      <h2 className="text-3xl font-bold">Terms and conditions</h2>
+      <h2 className="text-3xl font-bold">About Us</h2>
       <Editor
         value={text || ""}
         onTextChange={(e: EditorTextChangeEvent) => setText(e.htmlValue ?? "")}

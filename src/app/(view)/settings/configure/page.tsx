@@ -21,13 +21,13 @@ import React from "react";
 
 export default function Page() {
   return (
-    <section>
-      <div className="flex justify-between items-center">
+    <section className="flex-1 h-full">
+      {/* <div className="flex justify-between items-center">
         <h3 className="text-2xl font-semibold">System Configuration</h3>
         <Button variant={"special"}>Save all changes</Button>
-      </div>
-      <div className="grid lg:grid-cols-2 gap-4 mt-8">
-        <Card>
+      </div> */}
+      <div className="gap-4 mt-8 flex justify-center h-[70dvh] items-center flex-1">
+        {/* <Card>
           <CardHeader className="flex items-center gap-4">
             <div className="rounded-full p-4 bg-sky-200 w-fit text-sky-700">
               <CalculatorIcon />
@@ -49,8 +49,8 @@ export default function Page() {
               modern lifestyles.
             </div>
           </CardContent>
-        </Card>
-        <Card>
+        </Card> */}
+        {/* <Card>
           <CardHeader className="flex items-center gap-4">
             <div className="rounded-full p-4 bg-purple-200 w-fit text-purple-700">
               <BellRingIcon />
@@ -80,8 +80,8 @@ export default function Page() {
               09:00 AM
             </div>
           </CardContent>
-        </Card>
-        <Card>
+        </Card> */}
+        <Card className="w-1/2">
           <CardHeader className="flex items-center gap-4">
             <div className="rounded-full p-4 bg-green-200 w-fit text-green-700">
               <DatabaseIcon />
@@ -109,17 +109,18 @@ export default function Page() {
                 </CardHeader>
               </Card>
             </div>
-            <Button className="w-full bg-orange-100! text-orange-600 border border-orange-600/50">
+            {/* <Button className="w-full bg-orange-100! text-orange-600 border border-orange-600/50">
               <RefreshCcwIcon />
               Force Recalculate Daily Summaries
             </Button>
             <Button className="w-full bg-orange-100! text-orange-600 border border-orange-600/50">
               <RefreshCcwIcon />
               Force Recalculate Monthly Summaries
-            </Button>
+            </Button> */}
+            <div className="w-full"></div>
           </CardContent>
         </Card>
-        <Card>
+        {/* <Card>
           <CardHeader className="flex items-center gap-4">
             <div className="rounded-full p-4 bg-zinc-200 w-fit text-zinc-700">
               <CloudUploadIcon />
@@ -146,7 +147,7 @@ export default function Page() {
               <Switch />
             </Alert>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </section>
   );

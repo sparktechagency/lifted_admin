@@ -39,11 +39,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Add from "./add";
 import { useQuery } from "@tanstack/react-query";
 import { getAffirmationCategories } from "@/lib/api/admin";
 import { useCookies } from "react-cookie";
+import Edit from "./edit";
+import Delete from "./delete";
 
 export default function Page() {
   const [{ token }] = useCookies(["token"]);
@@ -62,7 +64,9 @@ export default function Page() {
         <Card className="lg:h-[400px] flex flex-col">
           <CardHeader className="flex flex-wrap justify-between items-center gap-3">
             <CardTitle className="text-2xl">Affirmation Categories</CardTitle>
-            <Add />
+            <Suspense>
+              <Add />
+            </Suspense>
           </CardHeader>
           <CardContent className="flex-1 space-y-6">
             <div className="flex justify-end gap-4">
@@ -124,12 +128,14 @@ export default function Page() {
                         {new Date(category.created_at).toLocaleDateString()}
                       </TableCell>
                       <TableCell className="text-center space-x-2">
-                        <Button variant={"outline"} size={"icon"}>
-                          <EditIcon />
-                        </Button>
-                        <Button variant={"outline"} size={"icon"}>
-                          <TrashIcon />
-                        </Button>
+                        <Edit
+                          data={{
+                            id: String(category.id),
+                            name: category.name,
+                            description: category.description,
+                          }}
+                        />
+                        <Delete id={String(category.id)} />
                       </TableCell>
                     </TableRow>
                   ))}

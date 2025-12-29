@@ -26,13 +26,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { ImageIcon, MailIcon, PhoneIcon, User2Icon } from "lucide-react";
 import { toast } from "sonner";
+import { useCookies } from "react-cookie";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getMeApi, updateMeApi } from "@/lib/api/auth";
+import { idk } from "@/lib/utils";
 
 // ------------------ ZOD SCHEMA ------------------
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters long."),
-  phone_number: z
-    .string()
-    .regex(/^\+?\d{10,15}$/, "Invalid phone number format."),
+  // phone_number: z
+  //   .string()
+  //   .regex(/^\+?\d{10,15}$/, "Invalid phone number format."),
   avatar: z
     .any()
     .refine((file) => file instanceof File || file === null, "Invalid file."),
@@ -40,59 +44,62 @@ const formSchema = z.object({
 
 // ------------------ COMPONENT ------------------
 export default function Account() {
-  // const [{ token }] = useCookies(["token"]);
+  const [{ token }] = useCookies(["token"]);
   const [mail, setMail] = useState("");
   const [currentAvatar, setCurrentAvatar] = useState<string | null>(null);
 
   // ----------------- Data mofidication and direction -------------
-  // const { data, isPending } = useQuery({
-  //   queryKey: ["profile_data"],
-  //   queryFn: (): idk => getProfileApi(token),
-  //   enabled: !!token,
-  // });
-  // const { mutate } = useMutation({
-  //   mutationKey: ["updateProfile"],
-  //   mutationFn: (body: FormData) => {
-  //     return updateProfileApi({ body, token });
-  //   },
-  //   onError: (err) => {
-  //     toast.error(err.message ?? "Failed to complete this request");
-  //   },
-  //   onSuccess: (res: idk) => {
-  //     toast.success(res.message ?? "Success!");
-  //   },
-  // });
+  const { data, isPending } = useQuery({
+    queryKey: ["profile_data"],
+    queryFn: (): idk => getMeApi(token),
+    enabled: !!token,
+  });
+  const { mutate } = useMutation({
+    mutationKey: ["updateProfile"],
+    mutationFn: (body: FormData) => {
+      return updateMeApi(token, body);
+    },
+    onError: (err) => {
+      toast.error(err.message ?? "Failed to complete this request");
+    },
+    onSuccess: (res: idk) => {
+      toast.success(res.message ?? "Success!");
+    },
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      phone_number: "",
+      // phone_number: "",
       avatar: null,
     },
   });
 
   // ------------------ EFFECT ------------------
-  // useEffect(() => {
-  //   if (!isPending && data?.data) {
-  //     form.setValue("name", data.data.name);
-  //     form.setValue("phone_number", data.data.contact_number);
-  //     setMail(data.data.email ?? "");
-  //     setCurrentAvatar(imgCreator(data.data.avatar));
-  //     console.log(data.data);
-  //   }
-  // }, [isPending, data, form]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (!isPending && data?.data) {
+      form.setValue("name", data.data.name);
+      // form.setValue("phone_number", data.data.contact_number);
+      setMail(data.data.email ?? "");
+      setCurrentAvatar(data.data.avatar);
+      console.log(data.data);
+    }
+  }, [isPending, data]);
 
   // ------------------ SUBMIT ------------------
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    // const formData = new FormData();
-    // formData.append("name", values.name);
+    const formData = new FormData();
+    formData.append("name", values.name);
     // formData.append("phone_number", values.phone_number);
-    // if (values.avatar instanceof File) {
-    //   formData.append("avatar", values.avatar);
-    // }
-    // console.log("Submitting:", values);
-    // mutate(formData);
+
+    if (values.avatar instanceof File) {
+      formData.append("avatar", values.avatar);
+    }
+
+    console.log("Submitting:", values);
+    mutate(formData);
   };
 
   // ------------------ RENDER ------------------
@@ -182,7 +189,7 @@ export default function Account() {
             />
 
             {/* Phone Field */}
-            <FormField
+            {/* <FormField
               control={form.control}
               name="phone_number"
               render={({ field }) => (
@@ -200,7 +207,7 @@ export default function Account() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* Email Display (Disabled) */}
             <div className="border rounded-md flex items-center px-3 opacity-60 pointer-events-none">
