@@ -34,18 +34,18 @@ export async function howl<T>(
   });
   
   if (!res.ok) {
-if (debug) {
-      const dataset = await res.json()
-      console.log(dataset);
-      console.log(`${base_url}${base_api}${endpoint}`);
-      if (token) {
-        console.log(`token = ${token}`);
+// if (debug) {
+//       const dataset = await res.json()
+//       console.log(dataset);
+//       console.log(`${base_url}${base_api}${endpoint}`);
+//       if (token) {
+//         console.log(`token = ${token}`);
         
-      }
-}
+//       }
+// }
       
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error((errorData as idk).message || "API request failed");
+    // const errorData = await res.json().catch(() => ({}));
+    // throw new Error((errorData as idk).message || "API request failed");
   }
 
   return res.json() as Promise<T>;

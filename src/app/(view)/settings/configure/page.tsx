@@ -22,35 +22,8 @@ import React from "react";
 export default function Page() {
   return (
     <section className="flex-1 h-full">
-      {/* <div className="flex justify-between items-center">
-        <h3 className="text-2xl font-semibold">System Configuration</h3>
-        <Button variant={"special"}>Save all changes</Button>
-      </div> */}
-      <div className="gap-4 mt-8 flex justify-center h-[70dvh] items-center flex-1">
-        {/* <Card>
-          <CardHeader className="flex items-center gap-4">
-            <div className="rounded-full p-4 bg-sky-200 w-fit text-sky-700">
-              <CalculatorIcon />
-            </div>
-            <CardTitle className="text-xl">TDEE Calculation Formula</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <CardDescription>
-              Choose the metabolic formula used to calculate user daily calorie
-              targets.
-            </CardDescription>
-            <Select>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Harris-Benedict" />
-              </SelectTrigger>
-            </Select>
-            <div className="p-4 text-sm bg-secondary rounded-lg text-muted-foreground">
-              Note: Mifflin-St Jeor is generally considered more accurate for
-              modern lifestyles.
-            </div>
-          </CardContent>
-        </Card> */}
-        {/* <Card>
+      <div className="gap-4 grid grid-cols-2 mt-8 h-[70dvh] items-start flex-1">
+        <Card className="">
           <CardHeader className="flex items-center gap-4">
             <div className="rounded-full p-4 bg-purple-200 w-fit text-purple-700">
               <BellRingIcon />
@@ -67,7 +40,7 @@ export default function Page() {
               </div>
               <Switch />
             </Alert>
-            <Alert className="flex items-center border-0!">
+            {/* <Alert className="flex items-center border-0!">
               <div className="w-full flex-1">
                 <AlertTitle>Random Schedulling Engine</AlertTitle>
                 <AlertDescription>
@@ -75,13 +48,13 @@ export default function Page() {
                 </AlertDescription>
               </div>
               <Switch />
-            </Alert>
+            </Alert> */}
             <div className="p-4 bg-secondary rounded-lg text-muted-foreground text-xl font-semibold text-center">
               09:00 AM
             </div>
           </CardContent>
-        </Card> */}
-        <Card className="w-1/2">
+        </Card>
+        <Card>
           <CardHeader className="flex items-center gap-4">
             <div className="rounded-full p-4 bg-green-200 w-fit text-green-700">
               <DatabaseIcon />
@@ -109,14 +82,14 @@ export default function Page() {
                 </CardHeader>
               </Card>
             </div>
-            {/* <Button className="w-full bg-orange-100! text-orange-600 border border-orange-600/50">
+            <Button className="w-full bg-orange-100! text-orange-600 border border-orange-600/50">
               <RefreshCcwIcon />
               Force Recalculate Daily Summaries
             </Button>
             <Button className="w-full bg-orange-100! text-orange-600 border border-orange-600/50">
               <RefreshCcwIcon />
               Force Recalculate Monthly Summaries
-            </Button> */}
+            </Button>
             <div className="w-full"></div>
           </CardContent>
         </Card>

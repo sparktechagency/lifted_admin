@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { PlusIcon } from "lucide-react";
+import { EditIcon, PlusIcon } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -24,7 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useMutation } from "@tanstack/react-query";
-import { createFAQ } from "@/lib/api/admin";
+import { createFAQ, updateFAQ } from "@/lib/api/admin";
 import { toast } from "sonner";
 import { idk } from "@/lib/utils";
 import { useCookies } from "react-cookie";
@@ -41,20 +41,20 @@ type FaqFormValues = z.infer<typeof faqSchema>;
 
 /* ---------------- component ---------------- */
 
-export default function AddFaqDialog() {
+export default function EditFAQ({ data }: { data: any }) {
   const [{ token }] = useCookies(["token"]);
   const navig = useRouter();
   const form = useForm<FaqFormValues>({
     resolver: zodResolver(faqSchema),
     defaultValues: {
-      question: "",
-      answer: "",
+      question: data.question,
+      answer: data.answer,
     },
   });
   const { mutate, isPending } = useMutation({
-    mutationKey: ["add_faq"],
+    mutationKey: ["edit_faq"],
     mutationFn: (dataset: FaqFormValues) => {
-      return createFAQ(token, dataset.question, dataset.answer);
+      return updateFAQ(data.id, token, dataset.question, dataset.answer);
     },
     onError: (err) => {
       toast.error(err.message ?? "Failed to complete this request");
@@ -68,21 +68,19 @@ export default function AddFaqDialog() {
   const onSubmit = (values: FaqFormValues) => {
     console.log(values);
     mutate(values);
-    form.reset();
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="special">
-          <PlusIcon className="mr-2 h-4 w-4" />
-          Add New FAQ
+        <Button size={"icon"} variant={"ghost"}>
+          <EditIcon />
         </Button>
       </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New FAQ</DialogTitle>
+          <DialogTitle>Edit FAQ</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -128,7 +126,7 @@ export default function AddFaqDialog() {
               className="w-full"
               disabled={form.formState.isSubmitting || isPending}
             >
-              {isPending ? "Adding..." : "Add FAQ"}
+              {isPending ? "Editing..." : "Update FAQ"}
             </Button>
           </form>
         </Form>

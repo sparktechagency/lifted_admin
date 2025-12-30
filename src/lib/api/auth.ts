@@ -52,3 +52,6 @@ export async function updatePass(token:string,body:{
 }):Promise<ApiResponse<{user:UserType}>>{
     return howl(`/update-password`,{token,body,method:"POST"});
 }
+export async function getAllNotifications(token:string):Promise<ApiResponse<{user:UserType}>>{
+    return howl(`/notifications?per_page=20`,{token});
+}

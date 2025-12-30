@@ -7,35 +7,43 @@ import {
 } from "@/components/ui/card";
 import { EditIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import React, { Suspense } from "react";
+import Add from "./add";
+import { cookies } from "next/headers";
+import { getFAQs } from "@/lib/api/admin";
+import EditFAQ from "./edit";
+import Delete from "./delete";
+import DeleteFAQ from "./delete";
 
-export default function Page() {
+export default async function Page() {
+  const token = (await cookies()).get("token")?.value || "";
+  const data = await getFAQs(token);
+
   return (
     <section className="">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-2xl font-semibold">FAQ Management</h3>
         <Suspense>
-          <Button variant={"special"}>
-            <PlusIcon />
-            Add New FAQ
-          </Button>
+          <Add />
         </Suspense>
       </div>
-      <Card>
-        <CardContent className="flex justify-between items-center">
-          <div className="space-y-2">
-            <CardTitle>What is this? </CardTitle>
-            <CardDescription>Sent to all users - 2 hours ago</CardDescription>
-          </div>
-          <div className="">
-            <Button size={"icon"} variant={"ghost"}>
-              <EditIcon />
-            </Button>
-            <Button size={"icon"} variant={"ghost"}>
-              <Trash2Icon />
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        {data.data.data.map((faq) => (
+          <Card key={faq.id}>
+            <CardContent className="flex justify-between items-center">
+              <div className="space-y-2">
+                <CardTitle>{faq.question}</CardTitle>
+                <CardDescription>{faq.answer}</CardDescription>
+              </div>
+              <div className="">
+                <Suspense>
+                  <EditFAQ data={faq} />
+                  <DeleteFAQ id={String(faq.id)} />
+                </Suspense>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </section>
   );
 }

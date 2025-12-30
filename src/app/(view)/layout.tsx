@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -8,10 +8,12 @@ import {
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { BellIcon } from "lucide-react";
+import { BellIcon, EclipseIcon } from "lucide-react";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { getMeApi } from "@/lib/api/auth";
+import Link from "next/link";
+import ThemeChanger from "@/components/theme-changer";
 
 export default async function Layout({
   children,
@@ -43,9 +45,19 @@ export default async function Layout({
             <h4 className="font-semibold">Dashboard Overview</h4>
           </div>
           <div className="pr-4 flex items-center gap-2">
-            <Button size={"icon"} className="relative" variant={"ghost"}>
-              <BellIcon />
-              <div className="absolute size-3 bg-destructive rounded-full top-1 right-1"></div>
+            <Suspense>
+              <ThemeChanger />
+            </Suspense>
+            <Button
+              size={"icon"}
+              className="relative"
+              variant={"ghost"}
+              asChild
+            >
+              {/* <Link href={`/notifications`}>
+                <BellIcon />
+                <div className="absolute size-3 bg-destructive rounded-full top-1 right-1"></div>
+              </Link> */}
             </Button>
             <Avatar className="border">
               <AvatarImage src={"https://avatar.iran.liara.run/public"} />

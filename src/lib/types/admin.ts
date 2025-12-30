@@ -103,69 +103,33 @@ export interface getUserWorkoutApiResponse{
 }
 
 export interface getUserSummaryApiResponse{
-  daily: {
-    date: string
-    meals: Array<{
-      user_id: number
-      total_consumed: number
-      total_protein: number
-      total_carbs: number
-      total_fats: number
-      user: {
-        id: number
-        name: string
-        email: string
-        last_login_at: string
-      }
-    }>
-    workouts: Array<any>
-    water_logs: Array<any>
+  type: string
+  start_date: string
+  end_date: string
+  total_users: number
+  summary: {
+    total_calories_consumed: number
+    total_calories_burned: number
+    total_workouts_completed: number
+    total_water_consumed_ml: number
   }
-  monthly: {
-    month: number
-    year: number
-    meals: Array<{
-      user_id: number
-      total_consumed: number
-      total_protein: number
-      total_carbs: number
-      total_fats: number
-      user: {
-        id: number
-        name: string
-        email: string
-        last_login_at: string
-      }
-    }>
-    workouts: Array<{
-      user_id: number
-      user: {
-        id: number
-        name: string
-        email: string
-      }
-      total_burned: number
-      total_duration: number
-      activities: Array<{
-        id: number
-        name: string
-        burned: number
-        duration: number
-      }>
-    }>
-    water_logs: Array<{
-      user_id: number
-      total_water_ml: string
-      user: {
-        id: number
-        name: string
-        email: string
-        last_login_at: string
-      }
-    }>
-  }
+  data: Array<{
+    user: {
+      id: number
+      name?: string
+      email: string
+      avatar: string
+      last_login?: string
+    }
+    stats: {
+      calories_consumed: number
+      calories_burned: number
+      workouts_completed: number
+      water_consumed_ml: number
+      water_glasses: number
+    }
+  }>
 }
-
 
 export interface getAffirmationCategoriesApiResponse{
   current_page: number
@@ -235,6 +199,35 @@ export interface affirmationsApiResponse{
       last_login_at: string
     }
     category: any
+  }>
+  first_page_url: string
+  from: number
+  last_page: number
+  last_page_url: string
+  links: Array<{
+    url?: string
+    label: string
+    page?: number
+    active: boolean
+  }>
+  next_page_url: any
+  path: string
+  per_page: number
+  prev_page_url: any
+  to: number
+  total: number
+}
+
+
+export interface FAQresponse{
+  current_page: number
+  data: Array<{
+    id: number
+    question: string
+    answer: string
+    is_active: boolean
+    created_at: string
+    updated_at: string
   }>
   first_page_url: string
   from: number
